@@ -39,6 +39,7 @@ services:
       KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092
       KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_CREATE_TOPICS: "reservation-events:1:1"
     depends_on:
       - zookeeper
 
@@ -91,8 +92,6 @@ services:
   spark-analytics:
     build: ./spark-analytics
     environment:
-      SPARK_VERSION: 3.4.1
-      HADOOP_VERSION: 3
       SPARK_MASTER_URL: spark://spark-master:7077
     depends_on:
       - kafka
