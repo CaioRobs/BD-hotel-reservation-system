@@ -1,6 +1,6 @@
 FROM python:3.9-slim
 
-ENV SPARK_VERSION=3.3.0 \
+ENV SPARK_VERSION=3.4.1 \
     HADOOP_VERSION=3 \
     PYSPARK_PYTHON=python3 \
     PYSPARK_DRIVER_PYTHON=python3
@@ -21,8 +21,7 @@ RUN pip install pyspark kafka-python
 ENV SPARK_HOME=/opt/spark
 ENV PATH=$SPARK_HOME/bin:$PATH
 
-COPY ./reservation_analytics.py /app/reservation_analytics.py
-
 WORKDIR /app
+COPY reservation_analytics.py .
 
-# ENTRYPOINT ["spark-submit", "/app/reservation_analytics.py"]
+ENTRYPOINT ["spark-submit", "/app/reservation_analytics.py", "--packages", "org.apache.spark:spark-sql-kafka-0-10_2.12:3.4.1", "--master", "spark://spark-master:7077"]

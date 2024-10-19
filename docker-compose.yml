@@ -90,17 +90,10 @@ services:
 
   spark-analytics:
     build: ./spark-analytics
+    environment:
+      SPARK_VERSION: 3.4.1
+      HADOOP_VERSION: 3
+      SPARK_MASTER_URL: spark://spark-master:7077
     depends_on:
       - kafka
       - spark-master
-    environment:
-      SPARK_VERSION: "3.3.0"
-      HADOOP_VERSION: "3"
-      SPARK_MASTER_URL: "spark://spark-master:7077"
-    volumes:
-      - .:/app
-    command: >
-      spark-submit
-      --master spark://spark-master:7077
-      --packages org.apache.spark:spark-sql-kafka-0-10_2.12:3.3.0
-      /app/reservation_analytics.py
