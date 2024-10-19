@@ -16,7 +16,7 @@ RUN curl -L -o spark-$SPARK_VERSION-bin-hadoop$HADOOP_VERSION.tgz https://archiv
     mv spark-$SPARK_VERSION-bin-hadoop$HADOOP_VERSION /opt/spark && \
     rm spark-$SPARK_VERSION-bin-hadoop$HADOOP_VERSION.tgz
 
-RUN pip install pyspark kafka-python
+RUN pip install pyspark
 
 ENV SPARK_HOME=/opt/spark
 ENV PATH=$SPARK_HOME/bin:$PATH
@@ -24,4 +24,4 @@ ENV PATH=$SPARK_HOME/bin:$PATH
 WORKDIR /app
 COPY reservation_analytics.py .
 
-ENTRYPOINT ["spark-submit", "/app/reservation_analytics.py", "--packages", "org.apache.spark:spark-sql-kafka-0-10_2.12:3.4.1", "--master", "spark://spark-master:7077"]
+ENTRYPOINT ["spark-submit", "--packages", "org.apache.spark:spark-sql-kafka-0-10_2.12:3.4.1", "/app/reservation_analytics.py"]
