@@ -1,5 +1,5 @@
 from pyspark.sql import SparkSession
-from pyspark.sql.functions import from_json, col
+from pyspark.sql.functions import from_json, from_unixtime, col, window
 from pyspark.sql.types import (
     StructType,
     StructField,
@@ -35,9 +35,24 @@ reservation_df = reservation_df.selectExpr("CAST(value AS STRING)") \
     .select(from_json(col("value"), reservation_schema).alias("data")) \
     .select("data.*")
 
-# Print the data to the console (for debugging purposes)
-query = reservation_df.writeStream \
-    .outputMode("append") \
+
+reservation_df = reservation_df.withColumn(
+    "event_time", 
+    from_unixtime(col("timestamp") / 1000).cast("timestamp")
+)
+
+aggregated_df = reservation_df.groupBy(
+    window(col("event_time"), "10 minutes"),  
+    col("roomType"),
+    col("floor")
+).count()  
+
+aggregated_df = aggregated_df.withColumnRenamed("count", "reservation_count")
+
+query = aggregated_df.writeStream \
+    .outputMode("complete") \
     .format("console") \
+    .option("truncate", "false") \
     .start()
+
 query.awaitTermination()
