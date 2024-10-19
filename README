@@ -5,8 +5,8 @@ localhost:9092 -> kafka
 localhost:8079 -> kafka ui
 localhost:7077 -> spark-master
 localhost:8080 -> spark-master (ui)
-localhost:8081 -> spark-worker-1
-localhost:8082 -> spark-worker-2
+localhost:8081 -> spark-worker-1 (ui)
+localhost:8082 -> spark-worker-2 (ui)
 localhost:5432 -> postgreSQL
 localhost:2181 -> zookeeper
  
