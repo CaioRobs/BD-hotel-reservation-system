@@ -1,11 +1,11 @@
 services:
-  app:
-    build: .
+  hotel-reservation-app:
+    build: ./hotel-reservation-app
     ports:
       - "3000:3000"
     environment:
       PORT: 3000
-      DB_HOST: db
+      DB_HOST: postgres
       DB_PORT: 5432
       DB_USER: postgres
       DB_PASSWORD: password
@@ -14,9 +14,9 @@ services:
       KAFKA_PORT: 9092
     depends_on:
       - kafka
-      - db
+      - postgres
 
-  db:
+  postgres:
     image: postgres:latest
     restart: always
     ports:
@@ -87,3 +87,20 @@ services:
       SPARK_MASTER_URL: spark://spark-master:7077
     depends_on:
       - spark-master
+
+  spark-analytics:
+    build: ./spark-analytics
+    depends_on:
+      - kafka
+      - spark-master
+    environment:
+      SPARK_VERSION: "3.3.0"
+      HADOOP_VERSION: "3"
+      SPARK_MASTER_URL: "spark://spark-master:7077"
+    volumes:
+      - .:/app
+    command: >
+      spark-submit
+      --master spark://spark-master:7077
+      --packages org.apache.spark:spark-sql-kafka-0-10_2.12:3.3.0
+      /app/reservation_analytics.py
