@@ -2,9 +2,10 @@ from pyspark.sql import SparkSession
 from pyspark.sql.functions import from_json, col
 from pyspark.sql.types import (
     StructType,
+    StructField,
     StringType,
     IntegerType,
-    TimestampType
+    LongType
 )
 
 spark = SparkSession.builder \
@@ -14,14 +15,15 @@ spark = SparkSession.builder \
 kafka_bootstrap_servers = "kafka:9092"
 reservation_topic = "reservation-events"
 
-reservation_schema = StructType() \
-    .add("type", StringType()) \
-    .add("roomId", IntegerType()) \
-    .add("roomType", IntegerType()) \
-    .add("floor", IntegerType()) \
-    .add("startDate", TimestampType()) \
-    .add("endDate", TimestampType()) \
-    .add("timestamp", IntegerType())
+reservation_schema = StructType([
+    StructField("type", StringType(), True),
+    StructField("roomId", IntegerType(), True),
+    StructField("roomType", StringType(), True),
+    StructField("floor", StringType(), True),
+    StructField("startDate", StringType(), True),
+    StructField("endDate", StringType(), True),
+    StructField("timestamp", LongType(), True)
+])
 
 reservation_df = spark.readStream \
     .format("kafka") \

@@ -104,6 +104,8 @@ router.put("/:id", async (req: Request, res: Response) => {
         0,
         room.rows[0].room_number.length - 2
       ),
+      startDate,
+      endDate,
       timestamp: Date.now(),
     };
 

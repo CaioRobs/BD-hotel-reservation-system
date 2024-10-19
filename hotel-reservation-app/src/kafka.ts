@@ -12,6 +12,8 @@ export interface IReservationEvent {
   roomId: number;
   roomType: string;
   floor: string;
+  startDate?: string;
+  endDate?: string;
   timestamp: number;
 }
 
