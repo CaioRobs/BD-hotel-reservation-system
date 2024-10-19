@@ -1,4 +1,4 @@
-docker-compose up --build
+docker-compose up --build -d
 
 localhost:3000 -> REST API
 localhost:9092 -> kafka
