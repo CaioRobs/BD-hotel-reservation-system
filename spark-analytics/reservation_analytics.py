@@ -25,6 +25,7 @@ reservation_schema = StructType([
     StructField("timestamp", LongType(), True)
 ])
 
+# READ FROM KAFKA
 kafka_df = spark.readStream \
     .format("kafka") \
     .option("kafka.bootstrap.servers", kafka_bootstrap_servers) \
@@ -41,21 +42,25 @@ json_df = json_df.withColumn(
     from_unixtime(col("timestamp") / 1000).cast("timestamp")
 )
 
-aggregated_df = json_df.groupBy(
+json_df_with_watermark = json_df.withWatermark("event_time", "10 minutes")
+
+aggregated_df = json_df_with_watermark.groupBy(
     window(col("event_time"), "10 minutes"),
     col("roomType"),
     col("floor")
 ).count()
 
-aggregated_df = aggregated_df.withColumnRenamed("count", "reservation_count")
+hadoop = "namenode:8020"
+hdfs_file = "historical-reservations"
 
+# WRITE TO HDFS
 query = aggregated_df.writeStream \
     .outputMode("append") \
     .format("parquet") \
     .option("path",
-            "hdfs://namenode:8020/data/historical-reservations") \
+            f"hdfs://{hadoop}/data/{hdfs_file}") \
     .option("checkpointLocation",
-            "hdfs://namenode:8020/checkpoint/historical-reservations") \
+            f"hdfs://{hadoop}/checkpoint/{hdfs_file}") \
     .partitionBy("event_time") \
     .start()
 
