@@ -1,12 +1,14 @@
 docker-compose up --build -d
 
-localhost:3000 -> REST API
-localhost:9092 -> kafka
-localhost:8079 -> kafka ui
-localhost:7077 -> spark-master
-localhost:8080 -> spark-master (ui)
-localhost:8081 -> spark-worker-1 (ui)
-localhost:8082 -> spark-worker-2 (ui)
-localhost:5432 -> postgreSQL
-localhost:2181 -> zookeeper
+http://localhost:3000 -> REST API
+http://localhost:9092 -> kafka
+http://localhost:8079 -> kafka ui
+http://localhost:7077 -> spark-master
+http://localhost:8080 -> spark-master (ui)
+http://localhost:8081 -> spark-worker-1 (ui)
+http://localhost:8082 -> spark-worker-2 (ui)
+http://localhost:4040 -> spark-analytics (ui)
+http://localhost:9870 -> hdfs (namenode ui)
+http://localhost:5432 -> postgreSQL
+http://localhost:2181 -> zookeeper
  
