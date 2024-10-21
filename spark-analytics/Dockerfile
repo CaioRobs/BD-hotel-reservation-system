@@ -24,4 +24,4 @@ ENV PATH=$SPARK_HOME/bin:$PATH
 WORKDIR /app
 COPY reservation_analytics.py .
 
-ENTRYPOINT ["spark-submit", "--packages", "org.apache.spark:spark-sql-kafka-0-10_2.12:3.4.1", "/app/reservation_analytics.py"]
+ENTRYPOINT ["spark-submit", "--packages", "org.apache.spark:spark-sql-kafka-0-10_2.12:3.4.1", "--conf",  "spark.hadoop.fs.defaultFS=hdfs://namenode:8020", "/app/reservation_analytics.py"]
