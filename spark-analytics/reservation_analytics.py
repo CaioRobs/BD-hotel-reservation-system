@@ -61,7 +61,7 @@ query = aggregated_df.writeStream \
             f"hdfs://{hadoop}/data/{hdfs_file}") \
     .option("checkpointLocation",
             f"hdfs://{hadoop}/checkpoint/{hdfs_file}") \
-    .partitionBy("event_time") \
+    .partitionBy("window.start") \
     .start()
 
 query.awaitTermination()
