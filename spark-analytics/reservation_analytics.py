@@ -55,7 +55,7 @@ query = aggregated_df.writeStream \
     .option("path",
             "hdfs://namenode:8020/data/historical-reservations") \
     .option("checkpointLocation",
-            "hdfs://namenode:8020/checkpoint/reservations") \
+            "hdfs://namenode:8020/checkpoint/historical-reservations") \
     .partitionBy("event_time") \
     .start()
 
